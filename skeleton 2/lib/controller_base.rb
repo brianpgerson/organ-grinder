@@ -47,9 +47,10 @@ class ControllerBase
   # pass the rendered html to render_content
   def render(template_name)
     file_location = "views/#{self.class.to_s.underscore}/#{template_name.to_s.underscore}.html.erb"
-    template = ERB.new(File.read(file_location))
-    content = template.result(binding)
-    p content
+
+    form_authenticity_token = generate_authenticity_token
+
+    content = ERB.new(File.read(file_location)).result(binding)
     render_content(content, 'text/html')
   end
 
@@ -64,7 +65,28 @@ class ControllerBase
 
   # use this with the router to call action_name (:index, :show, :create...)
   def invoke_action(name)
+
+    danger_requests = %w[POST PUT PATCH DELETE]
+    if danger_requests.include?(@req.request_method)
+      unless ensure_authenticity
+        raise "YOU ARE NOT WHO YOU SAY YOU ARE"
+      end
+    end
+
     self.send(name)
     render(name) unless already_built_response?
+  end
+
+  private
+
+  def generate_authenticity_token
+    token = SecureRandom::urlsafe_base64
+    session['authenticity_token'] = token
+    token
+  end
+
+  def ensure_authenticity
+    debugger
+    session['authenticity_token'] == @params["authenticity_token"]
   end
 end

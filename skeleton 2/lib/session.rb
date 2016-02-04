@@ -1,4 +1,5 @@
-require 'json'
+
+
 
 class Session
   # find the cookie for this app

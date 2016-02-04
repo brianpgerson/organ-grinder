@@ -2,10 +2,11 @@ require 'rack'
 require_relative '../lib/controller_base'
 require_relative '../lib/router'
 require_relative 'middleWAR'
+require_relative 'fun_image'
 
 class MakeFlash < ControllerBase
   def index
-    render_content(dogs.to_json, "application/json")
+      render_content(dogs, "application/json")
   end
 
   def set_flash_then_redirect
@@ -36,6 +37,7 @@ end
 
 app = Rack::Builder.new do
   use ExceptionSaver
+  use FunImage
   run flash_app
 end.to_app
 
