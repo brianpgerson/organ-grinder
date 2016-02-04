@@ -1,0 +1,28 @@
+<h1><%= @post.title %></h1>
+<i>by</i> <%= @post.user.username %>
+<p>
+  <%= @post.body %>
+</p>
+<p>
+  <%= render @post.tags %>
+</p>
+  <div class="tags">
+
+    <form action="<%= post_tags_url(@post) %>" method="post">
+      <%= auth_token %>
+      <p>
+        <label for="Tag">New Tag Name:</label><br>
+        <input type="text" id="Tag" name="tag[name]">
+      </p>
+      <input type="submit" value="Add Tag">
+    </form>
+
+  </div>
+<p>
+  Currently signed in as <%= current_user.username %>.
+  <%= button_to "Sign Out", session_url, method: :delete %>
+</p>
+<p>
+  <%= link_to "Edit Post", edit_post_url %><br>
+  <%= link_to "Back To Posts", posts_url %><br>
+</p>

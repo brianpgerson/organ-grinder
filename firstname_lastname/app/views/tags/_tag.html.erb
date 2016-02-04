@@ -1,0 +1,6 @@
+<div class="tags">
+  <p>
+    Tagged: <%= tag.name %>
+    <%= button_to "Remove Tag", post_tag_url(tag.post, tag.id), method: :delete %>
+  </p>  
+</div>
